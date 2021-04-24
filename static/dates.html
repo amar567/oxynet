@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    
+    diffDays = (a,b)=>{
+        const date1 = new Date(a);
+        const date2 = new Date(b);
+        const diffTime = Math.abs(date2 - date1);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+        return(diffDays);
+    }
+    // document.write(diffDays('12/15/2010','12/16/2010') + " days");
+
+    function convert(str) {
+    var date = new Date(str),
+        mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+        day = ("0" + date.getDate()).slice(-2);
+        return [mnth, day ,date.getFullYear()].join("/");
+    }
+    // console.log(convert("Thu Jun 09 2011 00:00:00 GMT+0530 (India Standard Time)"))
+    //-> "2011-06-08"
+
+    addndays = (d,n)=>{
+        const date = new Date(d);
+        date.setDate(date.getDate() + n)
+        // console.log(convert(date));
+        return convert(date);
+    }
+    // document.write(addndays('12/3/2010',10));
+
+    var dates = [ [],[],[],[],[],[],[] ]
+
+    segregate = (a,b)=>{
+        console.log('#1')
+        var n = 0
+        while(n <= diffDays(a,b) ) {
+            // console.log(addndays(a,n))
+            nextday = new Date(addndays(a,n))
+            i = nextday.getDay()
+            console.log(nextday)
+            dates[i].push(nextday)
+            n++
+            console.log('#2')
+        }
+        console.log('#3')
+        console.log(dates)
+    }
+    
+    segregate('11/15/2010','12/16/2010')
+    // document.write(dates[0]);
+
+
+</script>
+</html>
