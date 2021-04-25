@@ -10,6 +10,7 @@ var cookieParser = require('cookie-parser')
 const cors = require('cors')
 const dotenv = require('dotenv')
 const { stat } = require('fs')
+const { ok } = require('assert')
 
 const domain = 'http://localhost:3005'
 
@@ -28,6 +29,10 @@ app.use(bodyParser.json())
 app.use(cors())
 app.use(cookieParser());
 
+app.get('/',(req,res) => {
+	console.log('hi',req.body)
+	return res.json({status:'ok'})
+})
 
 app.patch('/api/v1/users/change-pw', async (req, res) => {
 	console.log(req)
