@@ -34,8 +34,6 @@ app.get('/',(req,res) => {
 	return res.json({status:'ok'})
 })
 
-console.log(process.env)
-
 app.patch('/api/v1/users/change-pw', async (req, res) => {
 	console.log(req)
 	const { token, newpassword: plainTextPassword } = req.body
