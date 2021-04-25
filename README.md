@@ -1,2 +1,2 @@
 # oxynet
-[backend](http://oxynet.herokuapp.com/)
+you can make requests at our [backend](http://oxynet.herokuapp.com/)
