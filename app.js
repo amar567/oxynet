@@ -16,7 +16,7 @@ const domain = 'http://localhost:3005'
 
 // dotenv.config({ path: './config.env' });
 
-// const JWT_SECRET = process.env.JWT_SECRET
+const JWT_SECRET = process.env.JWT_SECRET
 
 // mongoose.connect(process.env.DATABASE, {
 // 	useNewUrlParser: true,
