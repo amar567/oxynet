@@ -8,21 +8,21 @@ const verify_mail = require('./utils/mails/verify_mail')
 const fpw_mail = require('./utils/mails/fpw_mail')
 var cookieParser = require('cookie-parser')
 const cors = require('cors')
-const dotenv = require('dotenv')
+// const dotenv = require('dotenv')
 const { stat } = require('fs')
 const { ok } = require('assert')
 
 const domain = 'http://localhost:3005'
 
-dotenv.config({ path: './config.env' });
+// dotenv.config({ path: './config.env' });
 
-const JWT_SECRET = process.env.JWT_SECRET
+// const JWT_SECRET = process.env.JWT_SECRET
 
-mongoose.connect(process.env.DATABASE, {
-	useNewUrlParser: true,
-	useUnifiedTopology: true,
-	useCreateIndex: true
-})
+// mongoose.connect(process.env.DATABASE, {
+// 	useNewUrlParser: true,
+// 	useUnifiedTopology: true,
+// 	useCreateIndex: true
+// })
 
 const app = express()
 app.use(bodyParser.json())
@@ -123,8 +123,8 @@ app.post('/api/v1/users/fpw/get', async (req, res) =>{
 	const link = domain+`/api/v1/users/fpw/auth?token=`+ ott
 	
 	// //send ott link
-	// fpw_mail(mail,link) 
-	console.log(link)
+	fpw_mail(mail,link) 
+	// console.log(link)
 
 	res.json({ status: 'ok'})
 
