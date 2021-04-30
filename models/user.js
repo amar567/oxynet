@@ -5,7 +5,7 @@ const User = new mongoose.Schema(
 		email:{type:String,unique: true},
 		password: { type: String},
 		mobile:{type:String,unique: true},
-		uname:{type:String,unique: false}
+		name:{type:String,unique: false}
 	},
 	{ collection: 'users' }
 )

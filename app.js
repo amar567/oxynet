@@ -12,7 +12,7 @@ const dotenv = require('dotenv')
 const { stat } = require('fs')
 const { ok } = require('assert')
 
-const domain = 'http://localhost:3005'
+const domain = 'http://localhost:3000'
 
 dotenv.config({ path: './config.env' });
 
@@ -79,7 +79,7 @@ app.post('/api/v1/users/login', async (req, res) => {
 
 	// console.log(user)
 
-	if(contact==user.email){			//this step is imp because for moongoose can find using incomplete contact also  
+	if(contact==user.email||contact==user.mobile){			//this step is imp because for moongoose can find using incomplete contact also  
 
 		if (await bcrypt.compare(password, user.password)) {
 			// the username, password combination is successful
@@ -125,7 +125,7 @@ app.post('/api/v1/users/fpw/get', async (req, res) =>{
 		)
 
 		//create one time link
-		const link = domain+`/api/v1/users/fpw/auth?token=`+ ott
+		const link = domain+`/?token=`+ ott
 		
 		// //send ott link
 		fpw_mail(mail,link) 
@@ -174,12 +174,12 @@ app.post('/api/v1/users/signup/auth', async(req, res) => {
 	
 	// console.log(req.body)
 
-	const { name,mobile, password, email } = req.body
+	const { name, mobile, password, email } = req.body
 
 	// console.log(mobile)
-	// console.log(upassword)
-	// console.log(name)
+	// console.log(password)
 	// console.log(email)
+	// console.log(name)
 
 	//import userdata from mongodb 
 	const user = await User.findOne({$or:[{email:email},{mobile:mobile}]})
@@ -208,13 +208,13 @@ app.post('/api/v1/users/signup/auth', async(req, res) => {
 							email : email,
 							mobile : mobile,
 							name : name,
-							// bcrypt hashing password for safety
+ 							// bcrypt hashing password for safety
 							password : await bcrypt.hash(password, 10)
 						},
 						JWT_SECRET
 					)
 					//create one time link
-					const link = domain+`/api/v1/users/signup/verify?token=`+ ott
+					const link = domain+`/?token=`+ ott
 
 					// send a mail to verify authenticity
 					verify_mail(email,link,name)
@@ -237,9 +237,9 @@ app.get('/api/v1/users/signup/verify', async(req,res)=> {
 			// console.log(jswt)
 			
 			// extract user info form jswt 
-			const email = jswt.mail
+			const email = jswt.email
 			const mobile = jswt.mobile
-			const uname = jswt.name
+			const name = jswt.name
 			const password = jswt.password
 
 			const user = await User.findOne({$or:[{email:email},{mobile:mobile}]})	//importing userdata from mongodb 
@@ -275,7 +275,7 @@ app.get('/api/v1/users/signup/verify', async(req,res)=> {
 						email,
 						password,
 						mobile,
-						uname
+						name
 					})
 			
 					console.log('User created successfully: ', response._id)
@@ -288,7 +288,8 @@ app.get('/api/v1/users/signup/verify', async(req,res)=> {
 					)
 			
 					res.cookie("token",token,{maxAge:365*24*60*60,httpOnly: true})
-					res.json({ status: 'ok', "token":token })		//responding with token for his existence	
+					res.json({ status: 'ok', "token":token })		//responding with token for his existence
+					r
 				}
 				catch (e) {
 					// res.send(404){status:"error",}
