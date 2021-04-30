@@ -8,13 +8,13 @@ const verify_mail = require('./utils/mails/verify_mail')
 const fpw_mail = require('./utils/mails/fpw_mail')
 var cookieParser = require('cookie-parser')
 const cors = require('cors')
-// const dotenv = require('dotenv')
+const dotenv = require('dotenv')
 const { stat } = require('fs')
 const { ok } = require('assert')
 
 const domain = 'http://localhost:3005'
 
-// dotenv.config({ path: './config.env' });
+dotenv.config({ path: './config.env' });
 
 const JWT_SECRET = process.env.JWT_SECRET
 
@@ -77,7 +77,9 @@ app.post('/api/v1/users/login', async (req, res) => {
 
 	const user = await User.findOne({$or:[{email:contact},{mobile:contact}]})	//importing userdata from mongodb 
 
-	if(contact==user.email||contact==user.mobile){			//this step is imp because for moongoose can find using incomplete contact also  
+	// console.log(user)
+
+	if(contact==user.email){			//this step is imp because for moongoose can find using incomplete contact also  
 
 		if (await bcrypt.compare(password, user.password)) {
 			// the username, password combination is successful
@@ -108,25 +110,31 @@ app.post('/api/v1/users/fpw/get', async (req, res) =>{
 
 	console.log('fpw-req-initiated')
 	const mail = req.body.mail // emailId of the user
+
+	const user = await User.findOne({mail}).lean()	//importing userdata from mongodb
 	// console.log(mail)
 
-	//make an ott (one time token)
-	const ott = jwt.sign(
-		{
-			mail: mail
-		},
-		JWT_SECRET,
-		{ expiresIn: '10m' }
-	)
+	if(user){
+		//make an ott (one time token)
+		const ott = jwt.sign(
+			{
+				mail: mail
+			},
+			JWT_SECRET,
+			{ expiresIn: '10m' }
+		)
 
-	//create one time link
-	const link = domain+`/api/v1/users/fpw/auth?token=`+ ott
-	
-	// //send ott link
-	fpw_mail(mail,link) 
-	// console.log(link)
+		//create one time link
+		const link = domain+`/api/v1/users/fpw/auth?token=`+ ott
+		
+		// //send ott link
+		fpw_mail(mail,link) 
+		// console.log(link)
 
-	res.json({ status: 'ok'})
+		res.json({ status: 'ok'})
+	}else{
+		res.json({ status: 'error', msg:'user not found!'})
+	}
 
 })
 
@@ -145,7 +153,6 @@ app.get('/api/v1/users/fpw/auth',async(req,res)=>{
 
 	if (!user) {
 		return res.json({ status: 'error', error: 'Invalid request' })		//checking for his existence
-		// res.redirect(domain+"")
 	}
 
 	if(ott.mail===user.mail){			//now verify user
@@ -159,7 +166,7 @@ app.get('/api/v1/users/fpw/auth',async(req,res)=>{
 		)
 		
 		res.json({ status: 'ok', "token":token })		//responding with token for his existence	
-		
+		res.redirect(domain+"/dashbord")
 	}
 })
 
@@ -194,11 +201,11 @@ app.post('/api/v1/users/signup/auth', async(req, res) => {
 		if (true) {
 				// send whole info via JWT
 					// console.log('fpw-req-initiated')
-					const mailId = req.body.mailId 		// emailId of the user
+					// const mailId = email		// emailId of the user
 					//make an ott (one time token)
 					const ott = jwt.sign(
 						{
-							mail : email,
+							email : email,
 							mobile : mobile,
 							name : name,
 							// bcrypt hashing password for safety
@@ -212,7 +219,7 @@ app.post('/api/v1/users/signup/auth', async(req, res) => {
 					// send a mail to verify authenticity
 					verify_mail(email,link,name)
 					// console.log(link)
-					return res.json({ status: 'ok', error: 'email sent' })
+					return res.json({ status: 'ok', msg: 'email sent' })
 				}
 
 		}
@@ -230,12 +237,12 @@ app.get('/api/v1/users/signup/verify', async(req,res)=> {
 			// console.log(jswt)
 			
 			// extract user info form jswt 
-			const mail = jswt.mail
+			const email = jswt.mail
 			const mobile = jswt.mobile
 			const uname = jswt.name
 			const password = jswt.password
 
-			const user = await User.findOne({$or:[{email:mail},{mobile:mobile}]})	//importing userdata from mongodb 
+			const user = await User.findOne({$or:[{email:email},{mobile:mobile}]})	//importing userdata from mongodb 
 
 			if(user){			//this step is imp because for moongoose can find using incomplete contact also  
 
@@ -265,7 +272,7 @@ app.get('/api/v1/users/signup/verify', async(req,res)=> {
 				try{
 					
 					const response = await User.create({
-						mail,
+						email,
 						password,
 						mobile,
 						uname
