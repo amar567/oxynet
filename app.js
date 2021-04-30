@@ -18,12 +18,6 @@ dotenv.config({ path: './config.env' });
 
 const JWT_SECRET = process.env.JWT_SECRET
 
-// mongoose.connect(process.env.DATABASE, {
-// 	useNewUrlParser: true,
-// 	useUnifiedTopology: true,
-// 	useCreateIndex: true
-// })
-
 const app = express()
 app.use(bodyParser.json())
 app.use(cors())
@@ -300,5 +294,12 @@ app.get('/api/v1/users/signup/verify', async(req,res)=> {
 			}
 
 })
+
+// app.post('/api/v1/users/auth', async(req,res)=>{
+// 				const jwt = req.token
+// 				const json = jwt.verify(token, JWT_SECRET)
+// 				return json.id
+// 				next()
+// })
 
 module.exports = app;
