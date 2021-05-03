@@ -12,7 +12,7 @@ const dotenv = require('dotenv')
 const { stat } = require('fs')
 const { ok } = require('assert')
 
-const domain = 'http://localhost:3000'
+const domain = 'https://amardeephk.xyz/redirect'
 
 dotenv.config({ path: './config.env' });
 
@@ -103,16 +103,16 @@ app.post('/api/v1/users/login', async (req, res) => {
 app.post('/api/v1/users/fpw/get', async (req, res) =>{
 
 	console.log('fpw-req-initiated')
-	const mail = req.body.mail // emailId of the user
+	const email = req.body.email // emailId of the user
 
-	const user = await User.findOne({mail}).lean()	//importing userdata from mongodb
-	// console.log(mail)
+	const user = await User.findOne({email}).lean()	//importing userdata from mongodb
+	// console.log(email)
 
 	if(user){
 		//make an ott (one time token)
 		const ott = jwt.sign(
 			{
-				mail: mail
+				email: email
 			},
 			JWT_SECRET,
 			{ expiresIn: '10m' }
@@ -122,7 +122,7 @@ app.post('/api/v1/users/fpw/get', async (req, res) =>{
 		const link = domain+`/?token=`+ ott
 		
 		// //send ott link
-		fpw_mail(mail,link) 
+		fpw_mail(email,link) 
 		// console.log(link)
 
 		res.json({ status: 'ok'})
@@ -140,16 +140,16 @@ app.get('/api/v1/users/fpw/auth',async(req,res)=>{
 
 	const token = req.query.token	//extracting ott from query = onetimetoken
 	const ott = jwt.verify(token, JWT_SECRET)	//  extracting email-id from ott = onetimetoken	
-	const mail = ott.mail	//extracting mail from query
+	const email = ott.email	//extracting email from query
 
-	const user = await User.findOne({mail}).lean()	//importing userdata from mongodb
+	const user = await User.findOne({email}).lean()	//importing userdata from mongodb
 	// console.log(user)
 
 	if (!user) {
 		return res.json({ status: 'error', error: 'Invalid request' })		//checking for his existence
 	}
 
-	if(ott.mail===user.mail){			//now verify user
+	if(ott.email===user.email){			//now verify user
 		//if true give him a cookie and redirect him to signed in page
 
 		const token = jwt.sign(
@@ -208,10 +208,12 @@ app.post('/api/v1/users/signup/auth', async(req, res) => {
 						JWT_SECRET
 					)
 					//create one time link
-					const link = domain+`/?token=`+ ott
+					const link = domain+`?token=`+ ott
 
 					// send a mail to verify authenticity
 					verify_mail(email,link,name)
+					.then((result) => console.log('Email sent...', result))
+					.catch((error) => console.log(error.message));
 					// console.log(link)
 					return res.json({ status: 'ok', msg: 'email sent' })
 				}
@@ -283,7 +285,6 @@ app.get('/api/v1/users/signup/verify', async(req,res)=> {
 			
 					res.cookie("token",token,{maxAge:365*24*60*60,httpOnly: true})
 					res.json({ status: 'ok', "token":token })		//responding with token for his existence
-					r
 				}
 				catch (e) {
 					// res.send(404){status:"error",}

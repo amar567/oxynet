@@ -1,23 +1,44 @@
-function fpw_mail(mail,link,name){
+const nodemailer = require('nodemailer');
+const { google } = require('googleapis');
 
-    const nodemailer = require('nodemailer')
-    const dotenv = require('dotenv')
-    dotenv.config({ path: './../config.env' })
+// These id's and secrets should come from .env file.
+const CLIENT_ID = '220301492443-h87jlnaqqtgivu2m0i7er794lkphl7e6.apps.googleusercontent.com';
+const CLEINT_SECRET = 'YKWMTFRUfI1ja13x9dFch5pQ';
+const REDIRECT_URI = 'https://developers.google.com/oauthplayground';
+const REFRESH_TOKEN = '1//047rbml3vuWD2CgYIARAAGAQSNwF-L9Ir1TRb1Sr1eSiupfOli6aJfKD8GjtFekUi9PIjzuNcfxV7LfaGOwg-gOsHTfcyzLAbLj8';
+const link= 'amardeephk.xyz'
+const name = 'amardeep'
+const mail = 'ahk19ms165@iiserkol.ac.in'
 
+const oAuth2Client = new google.auth.OAuth2(
+  CLIENT_ID,
+  CLEINT_SECRET,
+  REDIRECT_URI
+);
+oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
-    var transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: process.env.EMAIL,
-          pass: process.env.EMAIL_PASSWORD,
-        }
-      });
-      var mailOptions = {
-        from: process.env.EMAIL,
-        to: mail,
-        cc: ``,
-        subject: `Welcome to DNM-care`,
-        html: `
+async function verify_mail(mail,link,name) {
+  try {
+    const accessToken = await oAuth2Client.getAccessToken();
+
+    const transport = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        type: 'OAuth2',
+        user: 'mail.oxynet@gmail.com',
+        clientId: CLIENT_ID,
+        clientSecret: CLEINT_SECRET,
+        refreshToken: REFRESH_TOKEN,
+        accessToken: accessToken,
+      },
+    });
+
+    const mailOptions = {
+      from: 'Oxynet <mail.oxynet@gmail.com>',
+      to: mail,
+      subject: '',
+      text: 'Authorisation link'+link,
+      html: `
          
         <html xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:v="urn:schemas-microsoft-com:vml"><head>
         <!--[if gte mso 9]><xml><o:OfficeDocumentSettings><o:AllowPNG/><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml><![endif]-->
@@ -482,15 +503,17 @@ function fpw_mail(mail,link,name){
         </body></html>        
 
         `
-      };
-      
-      transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-          console.log(error);
-        } else {
-          console.log('Email sent: ' + info.response);
-        }
-      });
-};
+    };
 
-module.exports= fpw_mail
+    const result = await transport.sendMail(mailOptions);
+    return result;
+  } catch (error) {
+    return error;
+  }
+}
+
+module.exports= verify_mail
+
+// verify_mail(mail,link,name)
+//   .then((result) => console.log('Email sent...', result))
+//   .catch((error) => console.log(error.message));
