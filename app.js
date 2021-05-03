@@ -12,7 +12,7 @@ const dotenv = require('dotenv')
 const { stat } = require('fs')
 const { ok } = require('assert')
 
-const domain = 'http://localhost:3000'
+const domain = 'http://amardeephk.xyz/redirect'
 
 dotenv.config({ path: './config.env' });
 
