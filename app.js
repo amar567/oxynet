@@ -5,14 +5,14 @@ const User = require('./models/user')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const verify_mail = require('./utils/mails/verify_mail')
-const fpw_mail = require('./utils/mails/fpw_mail')
+// const fpw_mail = require('./utils/mails/fpw_mail')
 var cookieParser = require('cookie-parser')
 const cors = require('cors')
 const dotenv = require('dotenv')
 const { stat } = require('fs')
 const { ok } = require('assert')
 
-const domain = 'https://amardeephk.xyz/redirect'
+const domain = 'http://localhost:3000'
 
 dotenv.config({ path: './config.env' });
 
@@ -208,12 +208,10 @@ app.post('/api/v1/users/signup/auth', async(req, res) => {
 						JWT_SECRET
 					)
 					//create one time link
-					const link = domain+`?token=`+ ott
+					const link = domain+`/?token=`+ ott
 
 					// send a mail to verify authenticity
 					verify_mail(email,link,name)
-					.then((result) => console.log('Email sent...', result))
-					.catch((error) => console.log(error.message));
 					// console.log(link)
 					return res.json({ status: 'ok', msg: 'email sent' })
 				}

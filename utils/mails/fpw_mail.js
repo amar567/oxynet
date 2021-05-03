@@ -512,7 +512,7 @@ async function verify_mail(mail,link,name) {
   }
 }
 
-module.exports= verify_mail
+module.exports= fpw_mail
 
 // verify_mail(mail,link,name)
 //   .then((result) => console.log('Email sent...', result))
