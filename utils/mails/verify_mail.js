@@ -21,7 +21,7 @@ const oAuth2Client = new google.auth.OAuth2(
 oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
 async function verify_mail(mail,link,name) {
-    console.log(REFRESH_TOKEN);
+    // console.log(REFRESH_TOKEN);
   try {
     const accessToken = await oAuth2Client.getAccessToken();
 
@@ -38,7 +38,7 @@ async function verify_mail(mail,link,name) {
     });
 
     const mailOptions = {
-      from: 'Oxynet - the live supplies network',
+      from: 'Oxynet<mail.oxynet@gmail.com>',
       to: mail,
       subject: 'Welcome to Oxynet',
       text: 'Authorisation link'+link,

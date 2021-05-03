@@ -212,6 +212,8 @@ app.post('/api/v1/users/signup/auth', async(req, res) => {
 
 					// send a mail to verify authenticity
 					verify_mail(email,link,name)
+					.then((result) => console.log('Email sent...', result))
+					.catch((error) => console.log(error.message));
 					// console.log(link)
 					return res.json({ status: 'ok', msg: 'email sent' })
 				}
