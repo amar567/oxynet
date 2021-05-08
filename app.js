@@ -28,7 +28,7 @@ app.get('/',(req,res) => {
 	return res.json({status:'ok'})
 })
 
-app.patch('oxynet/change-pw', async (req, res) => {
+app.patch('/api/v1/users/change-pw', async (req, res) => {
 	console.log(req)
 	const { token, newpassword: plainTextPassword } = req.body
 
@@ -64,7 +64,7 @@ app.patch('oxynet/change-pw', async (req, res) => {
 	}
 })
 
-app.post('oxynet/login', async (req, res) => {
+app.post('/api/v1/users/login', async (req, res) => {
 
 	const { contact, password } = req.body   // get contact deets and password from req
 
@@ -101,7 +101,7 @@ app.post('oxynet/login', async (req, res) => {
 	}
 })
 
-app.post('oxynet/fpw/get', async (req, res) =>{
+app.post('/api/v1/users/fpw/get', async (req, res) =>{
 
 	console.log('fpw-req-initiated')
 	const email = req.body.email // emailId of the user
@@ -133,7 +133,7 @@ app.post('oxynet/fpw/get', async (req, res) =>{
 
 })
 
-app.get('oxynet/fpw/auth',async(req,res)=>{
+app.get('/api/v1/users/fpw/auth',async(req,res)=>{
 
 	// console.log('auth via link initiated')
 	// console.log(req.query.token)
@@ -165,7 +165,7 @@ app.get('oxynet/fpw/auth',async(req,res)=>{
 	}
 })
 
-app.post('oxynet/signup/auth', async(req, res) => {
+app.post('/api/v1/users/signup/auth', async(req, res) => {
 	
 	// console.log(req.body)
 
@@ -223,7 +223,7 @@ app.post('oxynet/signup/auth', async(req, res) => {
 
 })
 
-app.get('oxynet/signup/verify', async(req,res)=> {
+app.get('/api/v1/users/signup/verify', async(req,res)=> {
 
 			// console.log('auth via link initiated')
 			// console.log(req.query.token)
