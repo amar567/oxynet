@@ -1,6 +1,6 @@
-const nodemailer = require('nodemailer');
-const { google } = require('googleapis');
-const dotenv = require('dotenv')
+import nodemailer from 'nodemailer';
+import { google } from 'googleapis';
+import dotenv from 'dotenv'
 
 dotenv.config({ path: './config.env' });
 
@@ -491,7 +491,7 @@ async function verify_mail(mail,link,name) {
   }
 }
 
-module.exports= verify_mail
+export default verify_mail
 
 
 

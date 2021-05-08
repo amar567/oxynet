@@ -1,16 +1,17 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const mongoose = require('mongoose')
-const User = require('./models/user')
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
-const verify_mail = require('./utils/mails/verify_mail')
-// const fpw_mail = require('./utils/mails/fpw_mail')
-var cookieParser = require('cookie-parser')
-const cors = require('cors')
-const dotenv = require('dotenv')
-const { stat } = require('fs')
-const { ok } = require('assert')
+import express from 'express'
+import bodyParser from 'body-parser'
+import mongoose from 'mongoose'
+import Prod from './models/prod.js'
+import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
+import verify_mail from './utils/mails/verify_mail.js'
+// import fpw_mail from './utils/mails/fpw_mail'
+import cookieParser from 'cookie-parser'
+import cors from 'cors'
+import dotenv from 'dotenv'
+import { stat } from 'fs'
+import { ok } from 'assert'
+import routers from './routers/router.js'
 
 const domain = 'http://amardeephk.xyz/redirect'
 
@@ -22,6 +23,8 @@ const app = express()
 app.use(bodyParser.json())
 app.use(cors())
 app.use(cookieParser());
+
+app.use('/oxynet',routers)
 
 app.get('/',(req,res) => {
 	console.log('hi',req.body)
@@ -50,7 +53,7 @@ app.patch('/api/v1/users/change-pw', async (req, res) => {
 
 		const password = await bcrypt.hash(plainTextPassword, 10)
 
-		await User.updateOne(
+		await Prod.updateOne(
 			{ _id },
 			{
 				$set: { password }
@@ -70,7 +73,7 @@ app.post('/api/v1/users/login', async (req, res) => {
 
 	// console.log(contact, password)
 
-	const user = await User.findOne({$or:[{email:contact},{mobile:contact}]})	//importing userdata from mongodb 
+	const user = await Prod.findOne({$or:[{email:contact},{mobile:contact}]})	//importing userdata from mongodb 
 
 	// console.log(user)
 
@@ -106,7 +109,7 @@ app.post('/api/v1/users/fpw/get', async (req, res) =>{
 	console.log('fpw-req-initiated')
 	const email = req.body.email // emailId of the user
 
-	const user = await User.findOne({email}).lean()	//importing userdata from mongodb
+	const user = await Prod.findOne({email}).lean()	//importing userdata from mongodb
 	// console.log(email)
 
 	if(user){
@@ -143,7 +146,7 @@ app.get('/api/v1/users/fpw/auth',async(req,res)=>{
 	const ott = jwt.verify(token, JWT_SECRET)	//  extracting email-id from ott = onetimetoken	
 	const email = ott.email	//extracting email from query
 
-	const user = await User.findOne({email}).lean()	//importing userdata from mongodb
+	const user = await Prod.findOne({email}).lean()	//importing userdata from mongodb
 	// console.log(user)
 
 	if (!user) {
@@ -167,7 +170,7 @@ app.get('/api/v1/users/fpw/auth',async(req,res)=>{
 
 app.post('/api/v1/users/signup/auth', async(req, res) => {
 	
-	// console.log(req.body)
+	console.log(req.body)
 
 	const { name, mobile, password, email } = req.body
 
@@ -177,7 +180,7 @@ app.post('/api/v1/users/signup/auth', async(req, res) => {
 	// console.log(name)
 
 	//import userdata from mongodb 
-	const user = await User.findOne({$or:[{email:email},{mobile:mobile}]})
+	const user = await Prod.findOne({$or:[{email:email},{mobile:mobile}]})
 	// console.log(user)
 
 	// console.log(user)
@@ -239,7 +242,7 @@ app.get('/api/v1/users/signup/verify', async(req,res)=> {
 			const name = jswt.name
 			const password = jswt.password
 
-			const user = await User.findOne({$or:[{email:email},{mobile:mobile}]})	//importing userdata from mongodb 
+			const user = await Prod.findOne({$or:[{email:email},{mobile:mobile}]})	//importing userdata from mongodb 
 
 			if(user){			//this step is imp because for moongoose can find using incomplete contact also  
 
@@ -268,14 +271,14 @@ app.get('/api/v1/users/signup/verify', async(req,res)=> {
 				
 				try{
 					
-					const response = await User.create({
+					const response = await Prod.create({
 						email,
 						password,
 						mobile,
 						name
 					})
 			
-					console.log('User created successfully: ', response._id)
+					console.log('Prod created successfully: ', response._id)
 			
 					const token = jwt.sign(
 						{
@@ -304,4 +307,4 @@ app.get('/api/v1/users/signup/verify', async(req,res)=> {
 // 				next()
 // })
 
-module.exports = app;
+export default app
