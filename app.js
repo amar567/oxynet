@@ -28,7 +28,7 @@ app.get('/',(req,res) => {
 	return res.json({status:'ok'})
 })
 
-app.patch('/api/v1/users/change-pw', async (req, res) => {
+app.patch('oxynet/change-pw', async (req, res) => {
 	console.log(req)
 	const { token, newpassword: plainTextPassword } = req.body
 
@@ -57,13 +57,14 @@ app.patch('/api/v1/users/change-pw', async (req, res) => {
 			}
 		)
 		res.json({ status: 'ok' })
+		res.redirect(domain+"/login")
 	} catch (error) {
 		console.log(error)
-		res.json({ status: 'error', error: ';)' })
+		res.json({ status: 'error', error: 'something went wrong' })
 	}
 })
 
-app.post('/api/v1/users/login', async (req, res) => {
+app.post('oxynet/login', async (req, res) => {
 
 	const { contact, password } = req.body   // get contact deets and password from req
 
@@ -89,7 +90,7 @@ app.post('/api/v1/users/login', async (req, res) => {
 				// const tok = jwt.verify(token, JWT_SECRET)
 				// console.log(tok)
 
-				return res.json({ status: 'ok', token: token })
+				return res.json({ status: 'ok', token: token, Id:user._id  })
 
 			 }else{
 				return res.json({ status: 'error', error: 'Password did\'nt match' })
@@ -100,7 +101,7 @@ app.post('/api/v1/users/login', async (req, res) => {
 	}
 })
 
-app.post('/api/v1/users/fpw/get', async (req, res) =>{
+app.post('oxynet/fpw/get', async (req, res) =>{
 
 	console.log('fpw-req-initiated')
 	const email = req.body.email // emailId of the user
@@ -132,7 +133,7 @@ app.post('/api/v1/users/fpw/get', async (req, res) =>{
 
 })
 
-app.get('/api/v1/users/fpw/auth',async(req,res)=>{
+app.get('oxynet/fpw/auth',async(req,res)=>{
 
 	// console.log('auth via link initiated')
 	// console.log(req.query.token)
@@ -159,12 +160,12 @@ app.get('/api/v1/users/fpw/auth',async(req,res)=>{
 			JWT_SECRET
 		)
 		
-		res.json({ status: 'ok', "token":token })		//responding with token for his existence	
+		res.json({ status: 'ok', token:token ,Id:user._id })		//responding with token for his existence	
 		res.redirect(domain+"/dashbord")
 	}
 })
 
-app.post('/api/v1/users/signup/auth', async(req, res) => {
+app.post('oxynet/signup/auth', async(req, res) => {
 	
 	// console.log(req.body)
 
@@ -222,7 +223,7 @@ app.post('/api/v1/users/signup/auth', async(req, res) => {
 
 })
 
-app.get('/api/v1/users/signup/verify', async(req,res)=> {
+app.get('oxynet/signup/verify', async(req,res)=> {
 
 			// console.log('auth via link initiated')
 			// console.log(req.query.token)
@@ -257,7 +258,7 @@ app.get('/api/v1/users/signup/verify', async(req,res)=> {
 						// console.log(tok)
 
 						res.cookie("token",token,{maxAge:365*24*60*60,httpOnly: true})
-						res.json({ status: 'ok', "token":token })		//responding with token for his existence
+						res.json({ status: 'ok', token:token ,Id:user._id })		//responding with token for his existence
 
 					}else{
 						return res.json({ status: 'error', error: 'It seems the entered credentials are already in use, try siging in' })
@@ -283,8 +284,8 @@ app.get('/api/v1/users/signup/verify', async(req,res)=> {
 						JWT_SECRET
 					)
 			
-					res.cookie("token",token,{maxAge:365*24*60*60,httpOnly: true})
-					res.json({ status: 'ok', "token":token })		//responding with token for his existence
+					// res.cookie("token",token,{maxAge:365*24*60*60,httpOnly: true})
+					res.json({ status: 'ok', token:token, Id:response._id })		//responding with token for his existence
 				}
 				catch (e) {
 					// res.send(404){status:"error",}
