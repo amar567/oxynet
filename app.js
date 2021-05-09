@@ -13,7 +13,7 @@ import { stat } from 'fs'
 import { ok } from 'assert'
 import routers from './routers/router.js'
 
-const domain = 'http://amardeephk.xyz/redirect'
+const domain = 'https://oxynet.netlify.app'
 
 dotenv.config({ path: './config.env' });
 
@@ -77,29 +77,33 @@ app.post('/api/v1/users/login', async (req, res) => {
 
 	// console.log(user)
 
-	if(contact==user.email||contact==user.mobile){			//this step is imp because for moongoose can find using incomplete contact also  
+	try {
+		if(contact==user.email||contact==user.mobile){			//this step is imp because for moongoose can find using incomplete contact also  
 
-		if (await bcrypt.compare(password, user.password)) {
-			// the username, password combination is successful
-				
-				const token = jwt.sign(
-					{
-						id: user._id
-					},
-					JWT_SECRET
-				)
-        
-        // // check if the jwt is signed properly
-				// const tok = jwt.verify(token, JWT_SECRET)
-				// console.log(tok)
-
-				return res.json({ status: 'ok', token: token, Id:user._id  })
-
-			 }else{
-				return res.json({ status: 'error', error: 'Password did\'nt match' })
-			 }
-
-	}else{
+			if (await bcrypt.compare(password, user.password)) {
+				// the username, password combination is successful
+					
+					const token = jwt.sign(
+						{
+							id: user._id
+						},
+						JWT_SECRET
+					)
+			
+			// // check if the jwt is signed properly
+					// const tok = jwt.verify(token, JWT_SECRET)
+					// console.log(tok)
+	
+					return res.json({ status: 'ok', token: token, Id:user._id  })
+	
+				 }else{
+					return res.json({ status: 'error', error: 'Password did\'nt match' })
+				 }
+	
+		}else{
+			return res.json({ status: 'error', error: 'check contact details!' })
+		}
+	} catch (error) {
 		return res.json({ status: 'error', error: 'check contact details!' })
 	}
 })
