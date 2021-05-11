@@ -39,7 +39,7 @@ export const getAllAmbulances = async (req,res) => {
 
  export const updateAmbulance = async (req, res) => {
      try {
-         const ambulance = await Tour.findByIdAndUpdate(req.params.id, req.body, {
+         const ambulance = await Ambulance.findByIdAndUpdate(req.params.id, req.body, {
            new: true,
            runValidators: true
          });
