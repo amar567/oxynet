@@ -18,7 +18,7 @@ const ambulanceSchema = new mongoose.Schema({
     },
     lastAvailabity:{
         type:String,
-        enum: ['red','grey','white']
+        enum: ['avaiable','notConfirmed','confirmed']
     }
 
 });
