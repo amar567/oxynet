@@ -49,7 +49,11 @@ const ngoSchema = new mongoose.Schema({
             email : String,
             reason : String,
         }
-    ]
+    ],
+    verified: {
+        type:Boolean,
+        default: false
+    }
 })
 
 const Ngo  = mongoose.model('Ngo', ngoSchema);
