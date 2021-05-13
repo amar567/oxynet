@@ -29,3 +29,6 @@ const ngoSchema = new mongoose.Schema({
         type: String
     },
 })
+
+const Ngo  = mongoose.model('Ngo', ngoSchema);
+export default Ngo ;

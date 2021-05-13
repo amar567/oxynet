@@ -13,6 +13,21 @@ export const getAllAmbulances = async (req,res) => {
         res.status(400).json({message : "Bad request getAmbulances"});
     }
 }
+export const getAllAmbulancesByState = async (req,res) => {
+    try{
+        // const state =req.body;
+    
+        const Ambulances = await Ambulance.findOne({state:req.params.state});
+        res.status(200).json({
+            status:'success',
+            Ambulances,
+            result:Ambulance.length
+        });
+    }
+    catch(error){
+        res.status(400).json({message : "Bad request getAmbulances"});
+    }
+}
 
  export const getAmbulance = async(req,res) =>{
      try {

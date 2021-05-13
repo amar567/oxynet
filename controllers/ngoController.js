@@ -37,7 +37,7 @@ export const getAllNgos = async (req,res) => {
      }
  }
 
- export const updateAmbulance = async (req, res) => {
+ export const updateNgo = async (req, res) => {
      try {
          const ngo = await Ngo.findByIdAndUpdate(req.params.id, req.body, {
            new: true,
