@@ -1,5 +1,5 @@
 import express from 'express';
-import {getAllAmbulances,getAmbulance,getAllAmbulancesByState,createAmbulance,updateAmbulance,deleteAmbulance} from '../controllers/ambulanceController';
+import {getAllAmbulances,getAmbulance,getAllAmbulancesByState,createAmbulance,updateAmbulance,deleteAmbulance} from '../controllers/ambulanceController.js';
 
 const ambulanceRouter = express.Router();
 ambulanceRouter.get('/',getAllAmbulances);

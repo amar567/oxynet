@@ -1,4 +1,4 @@
-import Ambulance from '../models/ambulanceModel';
+import Ambulance from '../models/ambulanceModel.js';
 
 export const getAllAmbulances = async (req,res) => {
     try{

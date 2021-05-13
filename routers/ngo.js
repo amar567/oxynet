@@ -1,5 +1,5 @@
 import express from 'express';
-import {getAllNgos,getNgo,createNgo,updateNgo,deleteNgo} from '../controllers/ngoController';
+import {getAllNgos,getNgo,createNgo,updateNgo,deleteNgo} from '../controllers/ngoController.js';
 
 const NgoRouter = express.Router();
 
@@ -9,4 +9,4 @@ NgoRouter.post('/createNgo',createNgo);
 NgoRouter.patch('/updateNgo/id',updateNgo);
 NgoRouter.delete('deleteNgo/id',deleteNgo);
 
-export default ngoRouter;
+export default NgoRouter;

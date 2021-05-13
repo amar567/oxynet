@@ -1,4 +1,4 @@
-import Oxygen from '../models/oxygenModel';
+import Oxygen from '../models/oxygenModel.js';
 
 export const getAllNgos = async (req,res) => {
     try{

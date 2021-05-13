@@ -1,4 +1,4 @@
-import Ngo from '../models/ngoModel';
+import Ngo from '../models/ngoModel.js';
 
 export const getAllNgos = async (req,res) => {
     try{

@@ -1,5 +1,5 @@
 import express from 'express';
-import {getAllUsers,getUser,createUser,updateUser,deleteUser} from '../controllers/userController';
+import {getAllUsers,getUser,createUser,updateUser,deleteUser} from '../controllers/userController.js';
 
 const NgoRouter = express.Router();
 
@@ -9,4 +9,4 @@ NgoRouter.post('/createNgo',createUser);
 NgoRouter.patch('/updateNgo/id',updateUser);
 NgoRouter.delete('deleteNgo/id',deleteUser);
 
-export default ngoRouter;
+export default NgoRouter;
