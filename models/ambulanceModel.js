@@ -23,7 +23,6 @@ const ambulanceSchema = new mongoose.Schema({
     parentId:{
         type:String
     },
-    
     reportedBy:{
         type:Number,
         default:0

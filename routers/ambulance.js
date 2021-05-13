@@ -4,7 +4,7 @@ import {getAllAmbulances,getAmbulance,getAllAmbulancesByState,createAmbulance,up
 const ambulanceRouter = express.Router();
 ambulanceRouter.get('/',getAllAmbulances);
 ambulanceRouter.get('/:state',getAllAmbulancesByState);
-ambulanceRouter.get('/getAmbulance/:id',getAmbulance);
+ambulanceRouter.get('/:id',getAmbulance);
 ambulanceRouter.post('/createAmbulance',createAmbulance);
 ambulanceRouter.patch('/updateAmbulance/id',updateAmbulance);
 ambulanceRouter.delete('deleteAmbulance/id',deleteAmbulance);
