@@ -19,7 +19,31 @@ const ambulanceSchema = new mongoose.Schema({
     lastAvailabity:{
         type:String,
         enum: ['avaiable','notConfirmed','confirmed']
-    }
+    },
+    parentId:{
+        type:String
+    },
+    lastUpdate:{
+        type:String
+    },
+    reportedBy:{
+        type:Number,
+        default:0
+    },
+    district :  {
+        type : String,
+        required : true
+    },
+    state :  {
+        type : String,
+        required : true
+    },
+    reported : [
+        {
+            email : String,
+            reason : String,
+        }
+    ]
 
 });
 
