@@ -6,6 +6,7 @@ import oxygenRouter from './routers/oxygen.js'
 import authRouter from './routers/auth.js'
 import ambulanceRouter from './routers/ambulance.js'
 import ngoRouter from './routers/ngo.js'
+import userRouter from './routers/user.js'
 
 const app = express()
 app.use(bodyParser.json())
@@ -15,6 +16,7 @@ app.use(cookieParser());
 app.use('/oxynet',oxygenRouter)
 app.use('/ambulance',ambulanceRouter)
 app.use('/ngo',ngoRouter)
+app.use('/user',userRouter)
 app.use('/api',authRouter)
 app.get('/',(req,res) => {
 	console.log('hi',req.body)
