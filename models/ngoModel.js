@@ -28,6 +28,28 @@ const ngoSchema = new mongoose.Schema({
     whatsapp:{
         type: String
     },
+    parentId:{
+        type:String
+    },
+    
+    reportedBy:{
+        type:Number,
+        default:0
+    },
+    district :  {
+        type : String,
+        required : true
+    },
+    state :  {
+        type : String,
+        required : true
+    },
+    reported : [
+        {
+            email : String,
+            reason : String,
+        }
+    ]
 })
 
 const Ngo  = mongoose.model('Ngo', ngoSchema);
