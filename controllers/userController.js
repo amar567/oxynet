@@ -33,7 +33,7 @@ export const getAllUsers = async (req,res) => {
              user
             });
      } catch (error) {
-         res.status(400).json({message : "Bad request get user"})
+         res.status(400).json({message : error})
      }
  }
 
