@@ -16,31 +16,13 @@ const ambulanceSchema = new mongoose.Schema({
         type: String,
         required :[true, 'area of the ambulanced noticed']
     },
-    lastAvailabity:{
-        type:String,
-        enum: ['avaiable','notConfirmed','confirmed']
-    },
-    parentId:{
-        type:String
-    },
+    
     reportedBy:{
         type:Number,
         default:0
     },
-    district :  {
-        type : String,
-        required : true
-    },
-    state :  {
-        type : String,
-        required : true
-    },
-    reported : [
-        {
-            email : String,
-            reason : String,
-        }
-    ]
+   
+   
 
 });
 

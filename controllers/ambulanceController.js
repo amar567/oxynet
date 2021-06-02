@@ -48,7 +48,7 @@ export const getAllAmbulancesByState = async (req,res) => {
              ambulance
             });
      } catch (error) {
-         res.status(400).json({message : "Bad request get ambulance"})
+         res.status(400).json({message : `${error}`})
      }
  }
 
